@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment :: common_head(~{::meta},~{::title},~{},~{},~{})">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Thymeleaf Demo 1</title>
+</head>
+<body>
+
+<header id="header" th:replace="fragment :: header"></header>
+
+<p>变量表达式</p>
+<div>
+  <!--/*@thymesVar id="departments" type="java.util.Map"*/-->
+  <!-- 获取所有 departments -->
+  <p th:text="${departments}"></p>
+  <!-- 获取 departments 的第一个元素 -->
+  <p th:text="${departments[0]}"></p>
+  <!--/*@thymesVar id="name" type="java.lang.String"*/-->
+  <!-- 获取第一个 department 对象的 name 属性 -->
+  <p th:text="${departments[0].name}"></p>
+  <!-- 也可以用 ['name'] 来获取第一个 department 对象的 name 属性 -->
+  <p th:text="${departments[0]['name']}"></p>
+  <!-- 甚至可以调用方法! -->
+  <p th:text="${departments[0].getId()}"></p>
+  <p th:text="${departments[0]['name'].substring(0, 1)}"></p>
+</div>
+<hr>
+<p>选择变量表达式</p>
+<div th:object="${departments[1]}">
+  <p th:text="*{id}"></p>
+  <p th:text="*{name}"></p>
+</div>
+<p>等价的变量表达式</p>
+<div>
+  <p th:text="${departments[1].id}"></p>
+  <!-- 如果没有 "选择对象", 那么 * 和 $ 是等价的 -->
+  <p th:text="*{departments[1].name}"></p>
+</div>
+<p>${...} 中使用 #object 引用 "选择对象"</p>
+<div th:object="${departments[2]}">
+  <!--　以下三种方式在这种情况下是等价的 -->
+  <p th:text="${#object.id}">xxx</p>
+  <p th:text="*{id}">xxx</p>
+  <p th:text="${departments[2].id}">xxx</p>
+</div>
+
+<footer id="footer" th:replace="fragment :: footer"></footer>
+
+</body>
+</html>

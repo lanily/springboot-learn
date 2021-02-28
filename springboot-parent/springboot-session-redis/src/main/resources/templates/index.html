@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spring Boot Session Redis Example</title>
+</head>
+<body>
+<!--获取session中的port -->
+<h1 th:text="'Tomcat -- ' + ${session.port}"></h1>
+<p>This is the homepage!</p>
+<!--<a th:href="@{/spring/session/setSession}">设值</a>-->
+<!--<a th:href="@{/spring/session/getSession}">取值</a>-->
+<!--<a th:href="@{/spring/session/removeSession}">移除</a>-->
+
+<div>
+  <form th:action="@{/setSession}" method="post">
+    <textarea name="message" cols="40" rows="2"></textarea>
+    <br> <input type="submit" value="设值" />
+  </form>
+</div>
+
+
+<div>
+  <h2>当前Session值为：</h2>
+  <ul th:each="message : ${messages}">
+    <li th:text="${message}">取值</li>
+  </ul>
+</div>
+<div>
+  <form th:action="@{/destroy}" method="post">
+    <input type="submit" value="移除" />
+  </form>
+</div>
+
+</body>
+</html>

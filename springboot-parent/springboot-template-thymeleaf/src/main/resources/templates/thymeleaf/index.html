@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- /* ::meta, ::title, ::link, ::script */ -->
+<head th:replace="fragment :: common_head(~{::meta},~{::title},~{},~{},~{})">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>首页</title>
+</head>
+<body>
+<!-- fragment 是 thymeleaf 视图解析器识别的视图名 -->
+<header id="header" th:replace="thymeleaf/fragment :: header"></header>
+
+<div id="content">
+  <h2>首页</h2>
+  <p th:utext="#{index.welcome(${date})}">Welcome message</p>
+  <!--/*@thymesVar id="date" type="java.util.Date"*/-->
+  time:<span th:text="${date}"></span><br>
+  time:<span th:text="${{date}}"></span><br>
+  <!-- 时间格式化 -->
+  time:<span th:text="${#dates.format(date, 'yyyy-MM-dd HH:mm:ss')}"></span><br>
+  country: <span th:text="${#locale.country}"></span>
+  <hr>
+  <a href="#" th:href="@{/thymeleaf/demo1}">Demo1 Page</a>: 变量表达式, 选择变量表达式. <br>
+  <a href="#" th:href="@{/thymeleaf/demo2}">Demo2 Page</a>: url. <br>
+  <a href="#" th:href="@{/thymeleaf/demo3}">Demo3 Page</a>: 字面量; 连接字符串; 各种操作符, 表达式  <br>
+  <a href="#" th:href="@{/thymeleaf/demo4}">Demo4 Page</a>: 设置属性值 <br>
+  <a href="#" th:href="@{/thymeleaf/demo5}">Demo5 Page</a>: 迭代, 条件控制表达式 <br>
+  <hr>
+  <div>
+    <h3>Demo Part</h3>
+    <a th:href="@{/employee/emps}">Employee List</a>
+  </div>
+</div>
+
+<footer id="footer" th:replace="thymeleaf/fragment :: footer"></footer>
+
+</body>
+</html>

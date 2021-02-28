@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>springboot-parent</artifactId>
+    <groupId>com.hsiao.springboot</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>springboot-jar-separation-configuration</artifactId>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <build>
+    <filters>
+      <!-- 这里的文件名必须与多环境配置文件的文件名相同, ${env} 会动态获取不同环境 -->
+      <!-- 假如激活 dev 环境, 这时对应的文件就是 src/main/resources/env/app-dev.properties -->
+      <!-- 指定filter,根据最终profile下的env属性获取对应的配置文件 -->
+      <filter>src/main/resources/env/${env}/app-${env}.properties</filter>
+    </filters>
+    <!--jar包名字 -->
+    <finalName>${project.artifactId}-${profiles.active}</finalName>
+    <resources>
+      <!--  ++++++++++++++++++++++++++++++++++ 配置资源filter start +++++++++++++++++++++++++++++ -->
+      <resource>
+        <!-- 可以理解为真正的配置文件所在的目录 -->
+        <directory>src/main/resources</directory>
+        <!-- 是否替换资源中的属性, 设置为 true 才能实现动态替换 -->
+        <!-- 开启资源过滤，让Maven能解析资源文件中的Maven属性 -->
+        <filtering>true</filtering>
+        <!--  spring 多环境配置  -->
+        <!--根据激活条件引入打包所需的配置和文件-->
+        <includes>
+          <include>application.yml</include>
+          <!--引入所需环境的配置文件-->
+          <!--根据maven选择环境导入配置文件-->
+          <include>application-${profiles.active}.yml</include>
+          <include>*.properties</include>
+        </includes>
+        <excludes>
+          <!--使用通配符，当然可以定义多个exclude标签进行排除-->
+          <exclude>**/env/**</exclude>
+        </excludes>
+      </resource>
+
+      <resource>
+        <!-- ${profiles.active}由profile提供 -->
+        <directory>src/main/resources/env/${profiles.active}</directory>
+        <includes>
+          <include>**/*.yml</include>
+          <include>**/*.properties</include>
+        </includes>
+        <filtering>false</filtering>
+      </resource>
+      <!-- +++++++++++++++++++++++++++++++++++++ 配置资源filter end ++++++++++++++++++++++++++++++ -->
+
+      <!--打包时 排除jar包里面的配置文件，后面会将配置文件打在jar同级的config目录下 -->
+      <!--此处的设置是打包的时候排除不相关的目录-->
+      <!--排除配置文件-->
+      <resource>
+        <directory>src/main/resources</directory>
+        <!--先排除所有的配置文件-->
+        <excludes>
+          <!--使用通配符，当然可以定义多个exclude标签进行排除-->
+          <exclude>application*.yml</exclude>
+          <exclude>*.properties</exclude>
+        </excludes>
+      </resource>
+
+      <!--此处的设置是打包的时候排除不相关的目录-->
+      <!--      <resource>-->
+      <!--此处设置为上面在resources目录下创建的文件夹-->
+      <!--        <directory>src/main/resources/env</directory>-->
+      <!--        <excludes>-->
+      <!--          <exclude>dev/*</exclude>-->
+      <!--          <exclude>test/*</exclude>-->
+      <!--          <exclude>prod/*</exclude>-->
+      <!--        </excludes>-->
+      <!--开启过滤器，此处不能忽略！-->
+      <!--        <filtering>true</filtering>-->
+      <!--      </resource>-->
+
+      <!--此处设置是配置相应配置文件夹的路径-->
+      <!--      <resource>-->
+      <!--        <directory>src/main/resources/env/${env}</directory>-->
+      <!--      </resource>-->
+
+      <!--此处的设置是为了将放置于resources文件夹下mybatis的mapper文件正常打包进去，和一些不需要多环境的配置文件-->
+      <!--      <resource>-->
+      <!--如果将mybatis的mapper文件放在dao接口的同目录下，应该将此处设置为src/main/java-->
+      <!--        <directory>src/main/resources</directory>-->
+      <!--        <includes>-->
+      <!--          <include>**/email.properties</include>-->
+      <!--          <include>**/*.xml</include>-->
+      <!--        </includes>-->
+      <!--此处不需要过滤器过滤-->
+      <!--        <filtering>false</filtering>-->
+      <!--      </resource>-->
+
+      <!--      <resource>-->
+      <!--        <directory>src/main/resources</directory>-->
+      <!--        <filtering>false</filtering>-->
+      <!--        <includes>-->
+      <!--          <include>templates/**</include>-->
+      <!--          <include>static/**</include>-->
+      <!--          <include>mapper/**</include>-->
+      <!--          <include>freemark/**</include>-->
+      <!--          <include>**/*.properties</include>-->
+      <!--          <include>**/*.xml</include>-->
+      <!--          <include>*.properties</include>-->
+      <!--        </includes>-->
+      <!--      </resource>-->
+    </resources>
+
+
+    <plugins>
+
+      <plugin>
+        <!-- 指定maven编译的jdk版本,如果不指定,maven3默认用jdk 1.5 maven2默认用jdk1.3 -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <!--        <version>3.1</version>-->
+        <configuration>
+          <!-- 一般而言，target与source是保持一致的，但是，有时候为了让程序能在其他版本的jdk中运行(对于低版本目标jdk，源代码中不能使用低版本jdk中不支持的语法)，会存在target不同于source的情况 -->
+          <source>${java.version}</source> <!-- 源代码使用的JDK版本 -->
+          <target>${java.version}</target> <!-- 需要生成的目标class文件的编译版本 -->
+          <encoding>${file.encoding}</encoding><!-- 字符集编码 -->
+          <verbose>true</verbose>
+          <showWarnings>true</showWarnings>
+          <fork>true</fork><!-- 要使compilerVersion标签生效，还需要将fork设为true，用于明确表示编译版本配置的可用 -->
+          <executable><!-- path-to-javac --></executable><!-- 使用指定的javac命令，例如：<executable>${JAVA_1_4_HOME}/bin/javac</executable> -->
+          <compilerVersion>1.3</compilerVersion><!-- 指定插件将使用的编译器的版本 -->
+          <meminitial>128m</meminitial><!-- 编译器使用的初始内存 -->
+          <maxmem>512m</maxmem><!-- 编译器使用的最大内存 -->
+          <compilerArgument>-verbose -bootclasspath ${java.home}\lib\rt.jar
+          </compilerArgument><!-- 这个选项用来传递编译器自身不包含但是却支持的参数选项 -->
+        </configuration>
+      </plugin>
+
+      <!-- 分离打包开始 -->
+      <!-- 跳过测试代码 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
+
+      <!-- 方案一、
+      1. maven-jar-plugin 这个插件式专门用来打包用的，可以配置需要打包进去的文件，程序的入口类等。
+      2. maven-resources-plugin 这个插件是用来拷贝资源文件的。
+      3. maven-maven-dependency-plugin 这个插件是用来拷贝依赖库的。
+      -->
+      <!-- maven打包成jar的插件 -->
+      <!-- 打包jar文件时，配置manifest文件，加入lib包的jar依赖 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <!-- 把target/classes/下的文件导入到jar内 -->
+          <classesDirectory>target/classes/</classesDirectory>
+          <finalName>${project.artifactId}-${project.version}</finalName>
+          <archive>
+            <manifest>
+              <!-- 指定程序入口 -->
+              <!-- 指定入口类 -->
+              <mainClass>com.hsiao.springboot.Application</mainClass>
+              <!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->
+              <!-- jar包不包含唯一版本标识 -->
+              <useUniqueVersions>false</useUniqueVersions>
+              <!--  表示需要加入到类构建路径 -->
+              <addClasspath>true</addClasspath>
+              <!-- 服务依赖的jar包放在lib目录下 -->
+              <!-- MANIFEST.MF 中 Class-Path 加入前缀 指定生成的Manifest文件中Class-Path依赖lib前面都加上路径,构建出lib/xx.jar -->
+              <classpathPrefix>lib/</classpathPrefix>
+              <!-- 生成的jar中，不要包含pom.xml和pom.properties这两个文件 -->
+              <addMavenDescriptor>false</addMavenDescriptor>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+            </manifest>
+            <manifestEntries>
+              <!--MANIFEST.MF 中 Class-Path 加入资源文件目录 -->
+              <Class-Path>./resources/</Class-Path>
+            </manifestEntries>
+          </archive>
+          <!-- jar包中不包括以下文件 -->
+          <!-- 不打包资源文件（配置文件和依赖包分开） -->
+          <excludes>
+            <exclude>mapper/**</exclude>
+            <exclude>static/**</exclude>
+            <exclude>templates/**</exclude>
+            <exclude>**/*.yml</exclude>
+            <exclude>**/*.xml</exclude>
+            <exclude>**/*.properties</exclude>
+            <exclude>*.yml</exclude>
+            <exclude>*.properties</exclude>
+            <exclude>*.xml</exclude>
+            <exclude>*.txt</exclude>
+            <exclude>config/**</exclude>
+          </excludes>
+          <outputDirectory>${project.build.directory}</outputDirectory>
+        </configuration>
+      </plugin>
+
+      <!-- 拷贝依赖 copy-dependencies -->
+      <!-- 分离打包关键代码 maven-dependency-plugin -->
+      <!-- 该插件的作用是用于复制依赖的jar包到指定的文件夹里 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <type>jar</type>
+              <includeTypes>jar</includeTypes>
+              <excludeTransitive>false</excludeTransitive>
+              <stripVersion>false</stripVersion>
+              <includeScope>runtime</includeScope>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>false</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+              <!-- 存放服务依赖的jar包，存放在服务相同目录的lib文件夹下 -->
+              <outputDirectory>
+                ${project.build.directory}/lib
+              </outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- 拷贝资源文件 copy-resources -->
+      <!-- 分离打包关键代码 maven-resources-plugin -->
+      <!-- 该插件的作用是用于复制指定的文件 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <!-- 指定resources文件 -->
+              <resources>
+                <resource>
+                  <directory>src/main/resources</directory>
+                  <!-- 分环境过滤开启 -->
+                  <filtering>true</filtering>
+                  <includes>
+                    <include>application.yml</include>
+                    <!-- <include>*.properties</include> -->
+                    <!-- 分环境配置文件不用可删除 -->
+                    <!-- <include>application-${profiles.active}.yml</include> -->
+                  </includes>
+                </resource>
+                <resource>
+                  <directory>src/main/resources</directory>
+                  <!-- 分环境过滤关闭 -->
+                  <filtering>false</filtering>
+                  <includes>
+                    <include>templates/**</include>
+                    <include>static/**</include>
+                    <include>mapper/**</include>
+                    <include>freemark/**</include>
+                    <include>*.properties</include>
+                  </includes>
+                </resource>
+              </resources>
+              <!-- 输出路径 -->
+              <!-- <outputDirectory>${project.build.directory}/resources</outputDirectory> -->
+              <!--  在和jar包同级的目录下新建一个config目录，放入application.yml文件
+              这里可能有小伙伴有疑问了，打包的jar里面不是应该有application.yml文件吗，这里为什么再放一份？
+              这是因为boot读取配置有一个优先级，放在jar包外面config目录优先级最高，主要是便于从外部修改配置，而不是改jar包中的application.yml文件。优先级如下：
+              1. 当前目录的config目录下
+              2. 当前目录
+              3. classpath的config目录下
+              4. classpath的根目录            -->
+              <outputDirectory>${project.build.directory}/config</outputDirectory>
+            </configuration>
+          </execution>
+          <!--copy 脚本，把bin目录下的文件复制到，打包目录下-->
+          <execution>
+            <id>copy-bin</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>bin/</directory>
+                </resource>
+              </resources>
+              <outputDirectory>${project.build.directory}/bin</outputDirectory>
+            </configuration>
+          </execution>
+          <!--copy 脚本，把dll目录下的文件复制到，打包目录下-->
+          <execution>
+            <id>copy-dll</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>dll/</directory>
+                </resource>
+              </resources>
+              <outputDirectory>${project.build.directory}/dll</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- 分离打包结束 -->
+
+      <!-- 以上配置后你的文件打包后的文件目录如下
+          -lib
+          -bin
+          -dll
+          -config
+          -项目名.jar
+       -->
+      <!-- springboot项目内嵌了服务中间件，打包的时候可以使用官方的插件，会得到一个jar，我们往往称之为“胖jar”，可以直接通过nohup java -jar xxx.jar 来运行，非常方便。但是这样的话，我们每次有一点改动就要打包一个几十MB，上百MB的jar包上传到服务器，我们能不能将项目依赖的jar包分离出来呢？     -->
+      <!-- SpringBoot 打包插件，把 maven-jar-plugin 打成的jar包重新打成可运行jar包 -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <!--重写包含依赖，包含不存在的依赖，jar里没有pom里的依赖 -->
+          <includes>
+            <include>
+              <groupId>null</groupId>
+              <artifactId>null</artifactId>
+            </include>
+            <include>
+              <groupId>non-exists</groupId>
+              <artifactId>non-exists</artifactId>
+            </include>
+          </includes>
+          <layout>ZIP</layout>
+          <!--使用外部配置文件，jar包里没有资源文件 -->
+          <addResources>true</addResources>
+          <outputDirectory>${project.build.directory}/resources</outputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+            <configuration>
+              <!--配置jar包特殊标识 配置后，保留原文件，生成新文件 *-run.jar -->
+              <!--配置jar包特殊标识 不配置，原文件命名为 *.jar.original，生成新文件 *.jar -->
+              <!--<classifier>run</classifier> -->
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!--
+      打包结构：
+      lib 依赖jar包目录
+      resources 配置文件目录
+      spring-boot-template-0.0.1.jar 最终执行的jar包
+      spring-boot-template-0.0.1.jar.original springboot repackage 依赖的原jar包
+
+
+      spring-boot-template-0.0.1.jar中的MANIFEST.MF
+
+      Manifest-Version: 1.0
+      Implementation-Title: spring-boot-jar-separation-configuration
+      Implementation-Version: 0.0.1
+      Built-By: seer
+      Implementation-Vendor-Id: com.hsiao
+      Class-Path: lib/mysql-connector-java-6.0.6.jar lib/shiro-spring-1.4.0.jar
+      中间省略若干配置
+      lib/spring-boot-2.0.2.RELEASE.jar ./resources/
+      Spring-Boot-Version: 2.0.2.RELEASE
+      Main-Class: org.springframework.boot.loader.PropertiesLauncher
+      Start-Class: com.hsiao.springboot.Application
+      Spring-Boot-Classes: BOOT-INF/classes/
+      Spring-Boot-Lib: BOOT-INF/lib/
+      Created-By: Apache Maven 3.5.0
+      Build-Jdk: 1.8.0_40
+      Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot-starter-parent/spring-boot-template
+      -->
+
+      <!-- 指定多个源代码目录、多个资源文件目录 -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/main/java</source>
+                <source>src/main/library</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- 开发环境 -->
+    <profile>
+      <!-- 使用 mvn package 打包时, -P 指定 profile 的输入值就是此 id -->
+      <!-- id 可以随便命名, 不能重复, 可以与 env 相同, 这里演示特意与 env 不同 -->
+      <id>develop</id>
+      <properties>
+        <!-- env 必须与文件的后缀一致(application-${env}.properties) -->
+        <!-- 其中 env 这个标签也可以自定义, 没有强制要求必须是 env,
+             但必须与上面 application-${env}.properties 的 ${} 里的值一致 -->
+        <env>dev</env>
+        <profiles.active>dev</profiles.active>
+      </properties>
+      <!-- 不指定环境则默认 dev 环境, 可以放在任一个环境下, 但不能在多个环境中指定 -->
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources/env/dev</directory>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+    <!-- 测试环境 -->
+    <profile>
+      <id>test</id>
+      <properties>
+        <env>test</env>
+        <!--profiles.active对应application.yml中的@profiles.active@-->
+        <profiles.active>test</profiles.active>
+      </properties>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources/env/test</directory>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+    <!-- 预发布环境 -->
+    <profile>
+      <id>uat</id>
+      <properties>
+        <env>uat</env>
+        <profiles.active>uat</profiles.active>
+      </properties>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources/env/uat</directory>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+    <!-- 生产环境 -->
+    <profile>
+      <id>product</id>
+      <properties>
+        <env>prod</env>
+        <profiles.active>prod</profiles.active>
+      </properties>
+      <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources/env/prod</directory>
+          </resource>
+        </resources>
+      </build>
+    </profile>
+  </profiles>
+</project>

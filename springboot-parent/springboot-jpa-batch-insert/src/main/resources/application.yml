@@ -1,0 +1,35 @@
+server:
+  port: 9116
+spring:
+  #  main:
+  #    web-application-type: none
+  datasource:
+    url: jdbc:mysql://###:3306/v1_stock_market_system?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8&autoReconnect=true&failOverReadOnly=false
+    username: ###
+    password: ###
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      read-only: false
+      connection-timeout: 60000
+      idle-timeout: 60000
+      validation-timeout: 3000
+      max-lifetime: 60000
+      login-timeout: 5
+      maximum-pool-size: 60
+      minimum-idle: 10
+  jpa:
+    generate-ddl: false
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    database: mysql
+    open-in-view: true
+  redis:
+    host: ###
+    port: ###
+    password: ###
+  elasticsearch:
+    jest:
+      uris: http://###:9132,http://###:9132,http://###:9132,http://###:9132,http://###:9132
+
+indexCode: "399695.XSHE,399005.XSHE,399001.XSHE,000003.XSHG,000002.XSHG,000001.XSHG,399006.XSHE,000016.XSHG,000033.XSHG,000034.XSHG,000036.XSHG,000039.XSHG,000040.XSHG,000041.XSHG,000042.XSHG,000055.XSHG,000056.XSHG,000062.XSHG,000097.XSHG,000122.XSHG,000134.XSHG,000158.XSHG,000159.XSHG,000160.XSHG,000161.XSHG,000162.XSHG,000300.XSHG,000812.XSHG,000813.XSHG,000819.XSHG,000941.XSHG,000943.XSHG,000944.XSHG,000945.XSHG,000949.XSHG,399001.XSHE,399005.XSHE,399006.XSHE,399300.XSHE,399355.XSHE,399356.XSHE,399368.XSHE,399380.XSHE,399393.XSHE,399394.XSHE,399395.XSHE,399396.XSHE,399417.XSHE,399418.XSHE,399419.XSHE,399420.XSHE,399429.XSHE,399431.XSHE,399432.XSHE,399433.XSHE,399434.XSHE,399436.XSHE,399438.XSHE,399439.XSHE,399440.XSHE,399441.XSHE,399678.XSHE,399687.XSHE,399688.XSHE,399693.XSHE,399695.XSHE,399803.XSHE,399804.XSHE,399805.XSHE,399806.XSHE,399808.XSHE,399928.XSHE,399929.XSHE,399960.XSHE,399991.XSHE,399994.XSHE,399996.XSHE,399106.XSHE"

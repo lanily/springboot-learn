@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Boot Session JDBC Example</title>
+</head>
+<body>
+<h1>tomcat-8090</h1>
+<p>This is the homepage!</p>
+<!--<a th:href="@{/spring/session/setSession}">设值</a>-->
+<!--<a th:href="@{/spring/session/getSession}">取值</a>-->
+<!--<a th:href="@{/spring/session/removeSession}">移除</a>-->
+
+<div>
+  <form th:action="@{/setSession}" method="post">
+    <textarea name="msg" cols="40" rows="2"></textarea>
+    <br> <input type="submit" value="设值" />
+  </form>
+</div>
+
+<div>
+  <h2>Messages</h2>
+  <ul th:each="message : ${sessionMessages}">
+    <li th:text="">取值</li>
+  </ul>
+</div>
+
+<div>
+  <form th:action="@{/destroy}" method="post">
+    <input type="submit" value="移除" />
+  </form>
+</div>
+</body>
+</html>

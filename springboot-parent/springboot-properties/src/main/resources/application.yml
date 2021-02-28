@@ -1,0 +1,54 @@
+### 服务启动端口号
+##server:
+##  port: 8080
+### 配置person属性值
+#person:
+#  last-name: Darcy
+#  age: 20
+#  birth: 2018/01/01
+#  email: gmail@gmail.com
+#  maps:
+#    key1:java
+#    key2:golang
+#  lists:
+#    - a
+#    - b
+#    - c
+#  dog:
+#    name: 旺财
+#    age: 2
+## 属性的占位符
+#bootapp:
+#  name: SpringBoot
+#  description: ${bootapp.name}是一个spring应用程序
+#server:
+#  port: 8083
+#  profiles:
+#    active: dev #指定环境为dev
+#    # 使用三个---进行文档块区分
+#
+#---
+#server:
+#  port: 8084
+#spring:
+#  profiles: dev
+#---
+#server:
+#  port: 8085
+#spring:
+#  profiles: prod
+################################################################
+user:
+  nick-name: shawn
+  email: 1234567890@qq.com
+  iphone: 1234567890
+  abilities: [java, sql, html]
+  created_date: 2018/01/18 18:18:18
+################################################################
+ran:  # 这里的prefix不能是random，
+ran-value: ${random.value}
+ran-int: ${random.int}
+ran-long: ${random.long}
+ran-int-num: ${random.int(10)}
+ran-int-range: ${random.int[10,20]}
+ran-placeholder: placeholder_${ran.ran-value:此处不能有空格，且key为完整路径}

@@ -1,0 +1,105 @@
+#############################################################
+#  多环境下的优先级别是怎样的？
+#application.properties 优先级从高到低，application.yml文件优先级也一样
+#级别高的会覆盖级别低的，级别高没有的，级别低有的配置项会同样生效
+#1、-- 项目根目录config文件夹里面（优先级最高）
+#./config/
+#2、--项目根目录
+#./
+#3、-- src/main/resources/config/文件夹里面
+#classpath:/config
+
+#4、-- src/main/resources/
+#classpath:/
+#1-4优先级从高到低，优先级高的配置内容会覆盖优先级低的配置内容
+#  server.port=8081
+
+#  注意：
+#  级别高的配置会覆盖级别低的相同配置，级别高的配置没有的项，级别低有的项会同样生效。
+#  也就是说，无论级别高低，配置都会生效，只是相同的配置被级别高的配置覆盖。
+
+#  注意： 如果spring.profiles.active没有指定值，那么只会使用没有指定spring.profiles文件的值，也就是只会加载通用的配置，
+#  也就是Spring Boot只会加载application.yml或application.properties的通用配置。
+#  方式一：通过修改配置文件 application.yml中Spring.profiles.active的值，来指定加载的配置，
+#  也就是说，如果Spring.proflies.active=dev，则在启动服务之后，服务器就会加载application-dev.yml，若值为test或者prod，修改方式一致。
+#Spring:
+#  proflies:
+#    active=dev
+# 如果同一个环境有多个配置文件，可以通过spirng.profiles.include实现多配置文件
+#spring:
+#  profiles:
+#    include: dev,ldap
+
+#  方式二：使用命令启动服务，命令中带参数方式（此方式可以没有application.yml文件）
+#  具体操作步骤如下：
+#
+#  1>  进入到项目目录下，先用mvn install命令对项目进行打包，执行完此步骤后，会在项目对应的target目录下生成该项目对应的jar包
+#
+#  2>  进入target目录，执行命令：java -jar 生成的jar包 --spring.profiles.active=prod
+#通过此命令之后，项目就会调用application-prod.yml配置文件，即以生产环境的配置要求启动服务。同理，若是开发环境，只需将prod改为dev即可。
+
+
+#  方式三：此种方式是根据方式一延伸出的，更为灵活
+#  具体步骤如下：
+#
+#  1> application.yml中将spring.profiles.active的值改成spring.profiles.active=@activatedProperties@，这里的@activatedProperties@是一个变量对应pom文件里的环境配置。
+#
+#  下面为pom文件的配置<profiles>  <profile>
+#
+#  <id>dev</id>
+#  <properties>
+#  <!-- 环境标识，需要与配置文件的名称相对应 -->
+#  <profiles.active>dev</profiles.active>
+#  </properties>
+#  <activation>
+#  <!-- 默认环境 -->
+#  <activeByDefault>true</activeByDefault>
+#  </activation>
+#  </profile>
+#  <profile>
+#  <id>test</id>
+#  <properties>
+#  <!-- 测试环境 -->
+#  <profiles.active>test</profiles.active>
+#  </properties>
+#  </profile>
+#  <profile>
+#  <id>prod</id>
+#  <properties>
+#<!-- 生产环境 -->
+#  <profiles.active>prod</profiles.active>
+#  </properties>
+#  </profile>
+#  </profiles>
+
+#  对这段代码做下说明：
+#  首先在maven中配置了两个环境的配置文件，一个测试环境test，一个生产环境prod；
+#  其中
+#  <profiles.active></profiles.active>  是变量的key,test是变量的value
+#  注意：<profiles.active>dev</profiles.active>中的dev与配置文件名称application-dev.yml要一致
+#profiles.active名称对应application.properties配置文件中的spring.profiles.active=@profiles.active@
+
+#  当maven打包时会用pom文件里<profiles.active>dev</profiles.active>中的值替换掉application.properties配置文件中的@profiles.active@
+
+#  2>  执行Maven打包命令mvn clean package，观察控制台日志
+
+#  可能出现的问题
+#  1.=='@' that cannot start any token. (Do not use @ for indentation)
+#  在本地启动该项目时有时候会报如下错误
+#
+#  found character '@' that cannot start any token. (Do not use @ for indentation)
+#in 'reader', line 4, column 11:
+#  name: @profiles.active@
+#
+#  意思是识别不了@profiles.active@这个变量，这是因为这个变量没有被替换成我们需要的参数，如test,prod等，所以在本地启动时要加上参数启动，这样springboot会自动替换掉这个变量。
+#
+#  作者使用的是idea，所以启动springboot时在右上Edit Configurations-->Active Profiles 增加一个参数，参数值为你需要运行的环境名称，如test
+spring:
+  profiles:
+    active: @profiles.active@
+  #    include: common
+  # common 是application-后缀，此方式必须是application开头yml文件
+  # application-common.yml，如：
+  #
+  #common:
+  #  test: 外部yml文件测试common

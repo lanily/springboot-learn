@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment :: common_head(~{::meta},~{::title},~{},~{::style},~{})">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Thymeleaf Demo 4</title>
+  <style>
+    .sep { background-color: #ccc; }
+    .row { height: 40px;
+      line-height: 40px; }
+    .odd { background-color: red; }
+  </style>
+</head>
+<body>
+<header id="header" th:replace="fragment :: header"></header>
+<div id="content">
+  <p class="sep">设置任意属性值</p>
+  <div>
+    <!-- 替换 action 属性 -->
+    <form action="#" th:attr="action=@{/suscribe}">
+      <input type="text" name="name">
+      <input type="text" name="gender">
+      <input type="text" name="birthday">
+      <input type="text" name="email">
+      <!-- todo select departments -->
+      <!-- 一次替换多个属性值 1) submit 按钮的 value 属性; 2) class 属性  -->
+      <input type="submit" value="Submit" th:attr="value=#{form.submit}, class='sep'">
+    </form>
+  </div>
+  <p class="sep">追加属性</p>
+  <div>
+    <p class="row" th:classappend="odd">aaaaa</p>
+    <p class="row" th:classappend="${employees[0].id % 2 == 1} ? 'odd'">aaaaa</p>
+  </div>
+  <p class="sep">固定值布尔属性</p>
+  <div>
+    <form action="#" th:object="${employees[0]}">
+      男 <input type="radio" name="gender" th:checked="*{gender} == 1">
+      女 <input type="radio" name="gender" th:checked="*{gender} == 0">
+    </form>
+  </div>
+  <p class="sep">任意属性处理器</p>
+  <div>
+    <span th:xxx="${employees[2].name}"></span>
+  </div>
+</div>
+<footer id="footer" th:replace="fragment :: footer"></footer>
+</body>
+</html>

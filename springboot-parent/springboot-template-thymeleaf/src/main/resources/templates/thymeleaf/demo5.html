@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment :: common_head(~{::meta},~{::title},~{},~{::style},~{})">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .sep { background-color: #ccc; }
+    li { margin: 5px 0; background-color: aliceblue; }
+    .list { display: inline-block; width: 100px; background-color: antiquewhite; padding: 0 10px; text-align: center; }
+    .status { width: 400px; }
+    .odd { background-color: aqua; }
+    .even { background-color: orangered; }
+  </style>
+</head>
+<body>
+
+<header id="header" th:replace="fragment :: header"></header>
+
+<div id="content">
+  <p class="sep">迭代初步</p>
+  <div>
+    <ul>
+      <li>
+        <span class="list">编号</span>
+        <span class="list">姓名</span>
+        <span class="list">性别</span>
+        <span class="list">生日</span>
+        <span class="list">部门</span>
+        <span class="list">编辑</span>
+        <span class="list">删除</span>
+      </li>
+      <li th:each="emp : ${employees}">
+        <span class="list" th:text="${emp.id}"></span>
+        <span class="list" th:text="${emp.name}"></span>
+        <span class="list" th:text="${emp.gender == 1} ? '男': '女'"></span>
+        <span class="list" th:text="${{emp.birthday}}"></span>
+        <span class="list" th:text="${emp.department.name}"></span>
+        <span class="list"><a href="#">编辑</a></span>
+        <span class="list"><a href="#">删除</a></span>
+      </li>
+    </ul>
+  </div>
+
+  <p class="sep">保存迭代属性</p>
+  <div>
+    <ul>
+      <li>
+        <span class="list">编号</span>
+        <span class="list">姓名</span>
+        <span class="list">性别</span>
+        <span class="list">生日</span>
+        <span class="list">部门</span>
+        <span class="list">编辑</span>
+        <span class="list">删除</span>
+        <span class="list status">当前迭代状态</span>
+      </li>
+      <li th:each="emp, status: ${employees}" th:class="${status.odd} ? 'odd': 'even'">
+        <span class="list" th:text="${emp.id}"></span>
+        <span class="list" th:text="${emp.name}"></span>
+        <span class="list" th:text="${emp.gender == 1} ? '男': '女'"></span>
+        <span class="list" th:text="${{emp.birthday}}"></span>
+        <span class="list" th:text="${emp.department.name}"></span>
+        <span class="list"><a href="#">编辑</a></span>
+        <span class="list"><a href="#">删除</a></span>
+        <span class="list status" th:text="|index: ${status.index}; count: ${status.count}; size: ${status.size}; first: ${status.first}|"></span>
+      </li>
+    </ul>
+  </div>
+  <p class="sep">th:if</p>
+  <div>
+    <div th:if="${employees}">
+      todo 显示 employees 列表
+    </div>
+    <div th:if="not ${employees}">
+      这里不会显示
+    </div>
+  </div>
+  <p class="sep">switch 语句</p>
+  <div>
+    <div th:switch="${employees.size()}">
+      <p th:case="1">1 个</p>
+      <p th:case="2">2 个</p>
+      <p th:case="3">3 个</p>
+      <p th:case="*">很多个</p>
+    </div>
+  </div>
+</div>
+
+<footer id="footer" th:replace="fragment :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment :: common_head(~{::meta},~{::title},~{},~{},~{})">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Thymeleaf Demo 2</title>
+</head>
+<body>
+
+<!-- ~{...} 可以省略不写 -->
+<header id="header" th:replace="fragment :: header"></header>
+
+<p>Link URLs</p>
+<div>
+  <a href="#" th:href="@{/}">返回首页</a> <br>
+  <a href="#" th:href="@{/thymeleaf/demo1}">去 demo1 页面</a> <br>
+  <!-- 会生成 url: http://localhost:8888/demo/thymeleaf/demo1?username=赵波 -->
+  <a href="#" th:href="@{/thymeleaf/demo1(username=${employees[0].name})}">去 demo1 页面, 带参数</a> <br>
+  <!-- 会生成 url: http://localhost:8888/demo/thymeleaf/demo1/2 RESTful 风格的 url -->
+  <a href="#" th:href="@{/thymeleaf/demo1/{empId}(empId=${employees[1].id})}">去 demo1 页面, 带 RESTful 风格参数</a> <br>
+</div>
+
+<footer id="footer" th:replace="~{fragment :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Head 标签模板 -->
+<head th:fragment="common_head(meta,title,link,style,script)">
+  <!--/* Per-page placeholder for additional metas */-->
+  <th:block th:replace="${meta}"/>
+  <title th:replace="${title}">The awesome application</title>
+
+  <!-- Common styles and scripts -->
+  <link rel="stylesheet" type="text/css" media="all" th:href="@{/assets/css/base.css}">
+  <script type="text/javascript" th:src="@{/js/jquery-3.1.1-min.js}"></script>
+  <script type="text/javascript" th:src="@{/js/codergege.js}"></script>
+
+  <!--全局通用框架样式 end-->
+  <!--/* Per-page placeholder for additional links */-->
+  <th:block th:replace="${link}"/>
+  <!--/* Per-page placeholder for additional style */-->
+  <th:block th:replace="${style}"/>
+  <!--/* Per-page placeholder for additional scripts */-->
+  <th:block th:replace="${script}"/>
+</head>
+
+<body>
+<header th:fragment="header">
+  <hr>
+  <a th:href="@{/}">首页</a>
+  <hr>
+</header>
+
+<footer th:fragment="footer">
+  <hr>
+  Copyright &copy; 萧<br>
+  Email: Shawn@163.com
+</footer>
+</body>
+</html>

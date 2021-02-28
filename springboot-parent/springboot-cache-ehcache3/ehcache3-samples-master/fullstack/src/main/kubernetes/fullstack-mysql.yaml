@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fullstack-mysql
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: fullstack-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7.25
+        env:
+        - name: MYSQL_USER
+          value: "root"
+        - name: MYSQL_ALLOW_EMPTY_PASSWORD
+          value: "yes"
+        - name: MYSQL_DATABASE
+          value: "demo"
+        ports:
+        - containerPort: 3306
+  selector:
+    matchLabels:
+      app: fullstack-mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fullstack-mysql
+  namespace: default
+spec:
+  selector:
+    app: fullstack-mysql
+  ports:
+  - port: 3306

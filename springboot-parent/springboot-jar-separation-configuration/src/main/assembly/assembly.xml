@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- pom.xml 配置后你的文件打包后的文件目录如下
+    -lib
+    -bin
+    -dll
+    -config
+    -项目名.jar
+ -->
+<!-- 这个插件使用来将分离出来的静态资源和依赖的jar包(就是上面说到的文件目录)，
+压缩成一个zip文件。 -->
+<assembly>
+  <!--
+    必须写，否则打包时会有 assembly ID must be present and non-empty 错误
+    这个名字最终会追加到打包的名字的末尾，如项目的名字为 hsiao-test-0.0.1-SNAPSHOT,
+    则最终生成的包名为 hsiao-test-0.0.1-SNAPSHOT-bin.tar.gz
+   -->
+  <!-- id 标识符，添加到生成文件名称的后缀符。如果指定 id 的话（这里指定的是项目的版本），目标文件则是 ${artifactId}-${id}.jar。【如yigo-core.jar】 -->
+
+  <id>bin</id>
+  <!-- 打包的类型，如果有N个，将会打N个类型的包 -->
+  <formats>
+    <!--指定打包类型: zip、tar、tar.gz(or tgz)、tar.bz2 (or tbz2)、tar.snappy 、tar.xz (or txz)、jar、dir、war-->
+    <!--    <format>tar.gz</format>-->
+    <format>zip</format>
+  </formats>
+  <!--是否包含根目录-->
+  <!-- 指定打的包是否包含打包层目录（比如finalName是yigo-core，当值为true，所有文件被放在包内的yigo-core目录下，否则直接放在包的根目录下）-->
+  <includeBaseDirectory>true</includeBaseDirectory>
+
+  <!--第三方依赖设置-->
+  <!-- 指定将工程依赖的包打到包里的指定目录下 -->
+  <dependencySets>
+    <dependencySet>
+      <fileMode>755</fileMode>
+      <!-- 不使用项目的artifact，第三方jar不要解压，打包进zip文件的lib目录 -->
+      <useProjectArtifact>false</useProjectArtifact>
+      <!--      <useProjectArtifact>true</useProjectArtifact> &lt;!&ndash; 指定打包时是否包含工程自身生成的jar包 &ndash;&gt;-->
+      <!--设置相对于程序集根目录根目录的输出目录-->
+      <outputDirectory>lib</outputDirectory><!-- 指定将这些依赖包打到包里lib目录下 -->
+      <!--默认级别-->
+      <scope>runtime</scope><!-- 用于管理依赖的部署，runtime表示只在运行时使用 -->
+      <unpack>false</unpack> <!-- 是否打包jar -->
+      <!-- 不包括哪些文件 -->
+      <excludes>
+        <exclude>${project.groupId}:${project.artifactId}</exclude>
+      </excludes>
+    </dependencySet>
+    <dependencySet>
+      <fileMode>755</fileMode>
+      <outputFileNameMapping>${project.artifactId}.jar</outputFileNameMapping>
+      <outputDirectory>/lib/</outputDirectory>
+      <scope>runtime</scope>
+      <includes>
+        <include>${project.groupId}:${project.artifactId}</include>
+      </includes>
+    </dependencySet>
+  </dependencySets>
+
+  <!-- 指定要包含的文件集，可以定义多个fileSet -->
+  <fileSets>
+    <!--
+      0755->即用户具有读/写/执行权限，组用户和其它用户具有读写权限；
+      0644->即用户具有读写权限，组用户和其它用户具有只读权限；
+    -->
+    <!-- scripts -->
+    <!-- 将src/main/assembly/bin目录下的所有文件输出到打包后的bin目录中 -->
+    <fileSet>
+      <!-- 指定归档文件（要打的jar包）要包含的目录（下的文件及文件夹） -->
+      <directory>src/main/assembly/bin</directory>
+      <includes>
+        <include>*.sh</include>
+        <include>*.bat</include>
+      </includes>
+      <!--设置项目相关脚本输出的外部文件夹-->
+      <!-- 指定要将当前目录（<directory>标签中的目录放在归档文件（要打的jar包）/目录下） -->
+      <outputDirectory>bin</outputDirectory>
+      <!--设置文件权限-->
+      <fileMode>0755</fileMode>
+      <!--如果是脚本，一定要改为unix.如果是在windows上面编码，会出现dos编写问题-->
+      <lineEnding>unix</lineEnding>
+      <filtered>true</filtered><!-- 是否进行属性替换 -->
+    </fileSet>
+
+    <!-- 将src/main/assembly/config目录下的所有文件输出到打包后的config目录中 -->
+    <fileSet>
+      <directory>src/main/assembly/config</directory>
+      <outputDirectory>config</outputDirectory>
+      <fileMode>0644</fileMode>
+    </fileSet>
+
+    <!-- config files -->
+    <!-- 将src/main/resources下配置文件打包到config目录 -->
+    <fileSet>
+      <directory>src/main/resources</directory>
+      <!--设置配置文件输出的外部文件夹-->
+      <outputDirectory>/config</outputDirectory>
+      <!--      <outputDirectory>./config</outputDirectory>-->
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.properties</include>
+        <include>**/*.yml</include>
+      </includes>
+      <filtered>true</filtered><!-- 是否进行属性替换 -->
+    </fileSet>
+
+    <!-- executable jar -->
+    <!-- 将项目启动jar打包到lib目录中 -->
+    <fileSet>
+      <!--      <directory>target</directory>-->
+      <directory>${project.build.directory}</directory>
+      <!--设置项目jar以及项目依赖的第三方jar输出的外部文件夹-->
+      <!--      <outputDirectory>./</outputDirectory>-->
+      <outputDirectory>/</outputDirectory>
+      <includes>
+        <!--注意此处是将项目依赖的第三方jar全部copy至assembly打包出来的目录中
+        如果没有此段，则lib目录是在target目录下，而不会存放于assembly打包的目录中-->
+        <include>/lib/*</include>
+        <include>*.jar</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <!-- 将项目说明文档打包到docs目录中 -->
+    <!-- <fileSet>
+      <directory>.</directory>
+      <outputDirectory>./docs</outputDirectory>
+      <includes>
+        <include>*.md</include>
+      </includes>
+      <fileMode>0644</fileMode>
+    </fileSet>-->
+
+    <fileSet>
+      <directory>docs</directory>
+      <outputDirectory>./docs</outputDirectory>
+      <fileMode>0644</fileMode>
+    </fileSet>
+
+    <fileSet>
+      <directory>src/main/assembly/docs</directory>
+      <outputDirectory>./docs</outputDirectory>
+      <fileMode>0644</fileMode>
+    </fileSet>
+  </fileSets>
+
+</assembly>

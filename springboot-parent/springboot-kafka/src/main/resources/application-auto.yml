@@ -1,0 +1,45 @@
+server.port: 9528
+
+#============== kafka ===================
+# 指定kafka 代理地址，可以多个
+#local kafka
+spring:
+  kafka:
+    bootstrap-servers: 120.78.206.144:9092
+    #=============== consumer  ======================
+    consumer:
+      bootstrap-servers: ${spring.kafka.bootstrap-servers}
+      enable-auto-commit: true                          # 是否自动提交 关闭自动提交位移, 在消息被完整处理之后再手动提交位移.
+      auto-commit-interval: 100                         # 自动提交的间隔时间（enable.auto.commit=true），这里设置自动提交周期
+      auto-offset-reset: latest                         # 最早未被消费的offset
+      # 自动将偏移量置为最早的
+      # 可选值 earliest|latest|none
+      # earliest
+      #       当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费
+      # latest
+      #       当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，消费新产生的该分区下的数据
+      # none
+      #  topic各分区都存在已提交的offset时，从offset后开始消费；只要有一个分区不存在已提交的offset，则抛出异常
+      group-id: manual-group                                # 消费者群组ID，发布-订阅模式，即如果一个生产者，多个消费者都要消费，那么需要定义自己的群组，同一群组内的消费者只有一个能消费到消息
+      topic: records-1
+      max-poll-records: 1000                            # 批量消费一次最大拉取的数据量
+      max-poll-interval: 15000
+      max-partition-fetch-bytes: 15728640               # 15MB
+      session-timeout: 20000                            # 连接超时时间
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      val-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    #=============== producer  ======================
+    producer:
+      bootstrap-servers: ${spring.kafka.bootstrap-servers}
+      retries: 3                                        # 发送失败后的重复发送次数
+      batch-size: 16384                                 # 一次最多发送数据量
+      buffer-memory: 33554432                           # 32MB的批处理缓冲区
+      linger: 1
+      topic: records-11                                 # 5分钟流量统计结果发送目标topic
+    #=============== listener  ======================
+    listener:
+      batch-listener: true                              # 是否开启批量消费，true表示批量消费
+      concurrency: 3                                    # 设置消费的线程数
+      poll-timeout: 1500                                # 如果消息队列中没有消息，等待timeout毫秒后，调用poll()方法。如果队列中有消息，立即消费消息，每次消费的消息的多少可以通过max.poll.records配置。
+      topics: hs-test,hs-test1
+      ack-mode: manual_immediate

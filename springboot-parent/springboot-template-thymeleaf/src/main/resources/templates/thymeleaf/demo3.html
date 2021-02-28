@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment :: common_head(~{::meta},~{::title},~{},~{::style},~{})">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Thymeleaf Demo 3</title>
+  <style>
+    .sep { background-color:#ccc; }
+    .even { background-color: red;}
+    .odd { background-color: green;}
+  </style>
+</head>
+<body>
+
+<header id="header" th:replace="fragment :: header"></header>
+
+<p class="sep">字面量</p.se>
+  <div>
+<p th:text="'Any characters, <br>Let\'s</br> go!'"></p>
+<p>
+  今年是 <span th:text="2017"></span> <br>
+  明年是 <span th:text="2017 + 1"></span>
+</p>
+<p>
+<div th:if="${departments.size() > 0} == true">条件是真, div 内会被解析, 内容会显示</div>
+<div th:if="${departments.size() > 0} == false">条件是假, 这里的内容不会被解析, 不会显示</div>
+
+<div th:if="${(departments.size() > 0) == true}">
+  == 可以放在 {} 内部, 这种情况下, 表达式计算用的是 ognl/spel 引擎. 条件是真, div 内会被解析, 内容会显示
+</div>
+</p>
+<p>
+<div th:if="${departments} != null">会显示</div>
+<div th:if="${departments != null}">用 ognl/spel 引擎, 会显示</div>
+</p>
+<p>
+<div th:text="content">...</div>
+<!-- 上面就等价于 -->
+<div th:text="'content'">...</div>
+</p>
+</div>
+
+<p class="sep">连接字符串</p>
+<div>
+  <span th:text="'Some literal text and ' + ${departments[0].name}"></span>
+</div>
+
+<p class="sep">字面量替换</p>
+<div>
+  <p th:text="|一共有 ${departments.size()} 个部门|"></p>
+  <!-- 等价于下面 -->
+  <p th:text="'一共有 ' + ${departments.size()} + ' 个部门'"></p>
+  <!--还可以混合使用-->
+  <p th:text="'一共有 ' + |${departments.size()} 个部门|"></p>
+</div>
+
+<p class="sep">算术操作符</p>
+<div>
+  <div th:with="isEven = (${employees.size()} % 2 == 0)"></div>
+  <!-- 也可以包含在 {} 内, 那么 {} 内的整体就是一个 ognl/spel 表达式, 由 ognl/spel 引擎负责计算 -->
+  <div th:with="isOdd = ${employees.size() % 2 == 1}">
+    <span th:if="${isOdd}">是奇数</span>
+    <span th:if="!${isOdd}">是偶数</span>
+  </div>
+</div>
+
+<p class="sep">比较与相等操作符</p>
+<!-- >, <, 必须转意才能用 -->
+<div th:if="${departments.size()} &gt; 1">
+  <span th:text="|部门数量是 ${departments.size()}|"></span>
+</div>
+<!-- 可以用 gt, lt, ge, le 来代替, 这种比较好 -->
+<div th:if="${departments.size()} ge 3">
+  <span>至少有 3 个部门</span>
+</div>
+<footer id="footer" th:replace="~{fragment :: footer}"></footer>
+
+<p class="sep">条件表达式</p>
+<div>
+  <!-- else 部分可以省略, 这种情况下, 如果条件为 false, null 值会被返回 -->
+  <p th:class="${employees[0].id % 2 == 0}? 'even'" th:text="${employees[0].name}"></p>
+  <p th:class="${employees[1].id % 2 == 0}? 'even': 'odd'" th:text="${employees[1].name}"></p>
+  <p th:class="${employees[2].id % 2 == 0}? 'even': 'odd'" th:text="${employees[2].name}"></p>
+
+  <!-- ?: 默认表达式 -->
+  <span th:text="${employees[0].getGender()}?: '没有指定性别'"></span> <br>
+  <span th:text="${employees[2].getEmail()}?: '没有指定邮箱'"></span> <br>
+
+  <!-- 可以嵌套混合, 嵌套的话用 () 包起来 -->
+  <span th:text="(${employees[0].getGender()} == 1 ? '男': '女')?: '没有指定性别'"></span>
+</div>
+
+<p class="sep">No-Op 操作符</p>
+<div>
+  <p th:text="_">这里的内容不会被 th:text 替换</p>
+  <p th:text="${employees[0].email}?: _">没有指定电子邮箱</p>
+</div>
+
+<p class="sep">Conversion and Formatting</p>
+<div>
+  <span th:text="${{employees[0].birthday}}"></span> <br>
+  <span th:text="${employees[0].birthday}"></span> <br>
+</div>
+</body>
+</html>

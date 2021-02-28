@@ -1,0 +1,22 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.hsiao.security.properties.SecurityProperties",
+      "name": "king.security",
+      "type": "com.hsiao.security.properties.SecurityProperties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.hsiao.security.properties.SecurityProperties",
+      "name": "king.security.browser",
+      "type": "com.hsiao.security.properties.BrowserProperties"
+    },
+    {
+      "sourceType": "com.hsiao.security.properties.SecurityProperties",
+      "name": "king.security.code",
+      "type": "com.hsiao.security.properties.ValidateCodeProperties"
+    }
+  ]
+}
