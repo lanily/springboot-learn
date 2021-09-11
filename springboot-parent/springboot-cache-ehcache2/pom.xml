@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   <groupId>com.hsiao.springboot</groupId>
-  <artifactId>springboot-jpa-ehcache2</artifactId>
+  <artifactId>springboot-cache-ehcache2</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>springboot-jpa-ehcache2</name>
   <description>Demo project for Spring Boot ehcache2</description>

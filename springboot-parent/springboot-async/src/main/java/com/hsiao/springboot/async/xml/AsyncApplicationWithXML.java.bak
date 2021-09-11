@@ -1,0 +1,28 @@
+package com.hsiao.springboot.async.xml;
+
+
+/**
+ *
+ * 通过XML启动异步
+ *
+ * 1. 线程的前缀为xmlExecutor
+ * 2. 启动异步线程池配置
+ * @projectName springboot-parent
+ * @title: AsyncApplicationWithXML
+ * @description: TODO
+ * @author xiao
+ * @create 2021/3/6
+ * @since 1.0.0
+ */
+//@SpringBootApplication
+//@ImportResource("classpath:spring_async.xml")
+//public class AsyncApplicationWithXML {
+//
+//    private static final Logger log = LoggerFactory.getLogger(AsyncApplicationWithXML.class);
+//
+//    public static void main(String[] args) {
+//        log.info("Start AsyncApplication.. ");
+//        SpringApplication.run(AsyncApplicationWithXML.class, args);
+//    }
+//}
+

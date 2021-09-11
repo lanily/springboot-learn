@@ -1,0 +1,46 @@
+package com.hsiao.springboot.jersey.config;
+
+import com.hsiao.springboot.jersey.resource.EmployeeResource;
+import com.hsiao.springboot.jersey.resource.HelloWorldResource;
+import com.hsiao.springboot.jersey.resource.HumansResource;
+import com.hsiao.springboot.jersey.resource.JsonPayloadResource;
+import com.hsiao.springboot.jersey.resource.MatrixUriResource;
+import com.hsiao.springboot.jersey.resource.RequestCookiesResource;
+import com.hsiao.springboot.jersey.resource.RequestHeaderResource;
+import com.hsiao.springboot.jersey.resource.RequestParameterResource;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletProperties;
+import org.springframework.context.annotation.Configuration;
+
+/**
+https://www.cnblogs.com/lifan1998/p/10355952.html
+注意ApplicationPath，如果不添加无法访问，因为默认为/*，由于本项目无web.xml，所以在这里配置（配置文件里也可以）
+**/
+@Component
+@ApplicationPath("/")
+public class JerseyConfig extends ResourceConfig {
+    /**
+     * In constructor we can define Jersey Resources & Other Components
+     */
+    public JerseyConfig() {
+        /*
+         * Jersey will automatically register class with @provider, @Component  by scanning
+         * these packages + nested packages
+         */
+        // packages("com.hsiao.springboot.jersey");
+
+        /* CustomTypeParamterConsumeResource auto scanned and register */
+        //register(CustomTypeParamterConsumeResource.class);
+        register(MatrixUriResource.class);
+        register(RequestCookiesResource.class);
+        register(RequestHeaderResource.class);
+        register(RequestParameterResource.class);
+        register(EmployeeResource.class);
+        register(HumansResource.class);
+        register(HelloWorldResource.class);
+        property(ServletProperties.FILTER_FORWARD_ON_404, true);
+        register(MultiPartFeature.class);
+        register(JsonPayloadResource.class);
+    }
+}

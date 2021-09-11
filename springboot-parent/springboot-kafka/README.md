@@ -20,3 +20,7 @@ https://blog.csdn.net/h900302/article/details/110443142
 spring boot 集成kafka (多线程,消费者使用kafka的原生api实现,因为@KakfkaListener修改groupId无效)
 
 https://blog.csdn.net/qq_40633152/article/details/81198108
+
+https://blog.csdn.net/m0_46583157/article/details/108050916
+
+java -jar D:\java\avro-tools-1.7.7.jar compile schema . D:\java\dce.avsc .

@@ -1,0 +1,85 @@
+package com.hsiao.springboot.jersey.repository;
+
+
+import com.hsiao.springboot.jersey.model.Employee;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
+
+/**
+ *
+ * 〈一句话功能简述〉<br>
+ *
+ * @projectName springboot-parent
+ * @title: EmployeeMapper
+ * @description: TODO
+ * @author xiao
+ * @create 2021/8/7
+ * @since 1.0.0
+ */
+@Repository
+public class EmployeeRepository {
+
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+    @Autowired
+    public EmployeeRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
+
+    public Employee save(final Employee employee) {
+        String sql = "insert into EMPLOYEE values(DEFAULT, :name, :address, :createdOn, :modifiedOn)";
+        SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(employee);
+        this.namedParameterJdbcTemplate.update(sql, namedParameters);
+        return employee;
+    }
+
+
+    public Employee find(final Integer employeeId) {
+        String sql = "select * from EMPLOYEE where id=:employeeId";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("employeeId", employeeId);
+        return namedParameterJdbcTemplate.query(sql, namedParameters, new EmployeeMapper()).get(0);
+    }
+
+
+    public List<Employee> findAll() {
+        String sql = "select * from EMPLOYEE";
+        return namedParameterJdbcTemplate.query(sql, new EmployeeMapper());
+    }
+
+    public Employee update(final Employee employee, final Integer employeeId) {
+        String sql = "update EMPLOYEE set name=:name, address=:address where id=:id";
+        SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(employee);
+        this.namedParameterJdbcTemplate.update(sql, namedParameters);
+        sql = "select * from EMPLOYEE where id=:employeeId";
+        SqlParameterSource namedParameters2 = new MapSqlParameterSource("employeeId", employeeId);
+        return namedParameterJdbcTemplate.query(sql, namedParameters2, new EmployeeMapper()).get(0);
+    }
+
+
+    public void delete (final Integer employeeId) {
+        String sql = "delete from EMPLOYEE where id=:employeeId";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("employeeId", employeeId);
+        this.namedParameterJdbcTemplate.update(sql, namedParameters);
+    }
+
+    private static final class EmployeeMapper implements RowMapper<Employee> {
+        @Override
+        public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Employee employee = new Employee();
+            employee.setId(rs.getInt("id"));
+            employee.setName(rs.getString("name"));
+            employee.setAddress(rs.getString("address"));
+            employee.setCreatedOn(rs.getDate("created_on"));
+            employee.setModifiedOn(rs.getDate("modified_on"));
+            return employee;
+        }
+    }
+}

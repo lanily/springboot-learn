@@ -1,0 +1,177 @@
+{
+  "type": "record",
+  "name": "JobResult",
+  "namespace": "com.hsiao.springboot.kafka.model",
+  "fields": [
+    {
+      "name": "jobRequestId",
+      "type": {
+        "type": "string",
+        "avro.java.string": "string"
+      }
+    },
+    {
+      "name": "jobClientReference",
+      "type": {
+        "type": "string",
+        "avro.java.string": "string"
+      }
+    },
+    {
+      "name": "graphResults",
+      "type": [
+        null,
+        "bytes"
+      ]
+    },
+    {
+      "name": "riskJobResultReferences",
+      "type": [
+        null,
+        {
+          "type": "record",
+          "name": "RiskJobResultReferences",
+          "fields": [
+            {
+              "name": "calcableReference",
+              "type": {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            },
+            {
+              "name": "environmentReference",
+              "type": {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            },
+            {
+              "name": "calcRequestListReference",
+              "type": {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            },
+            {
+              "name": "calcRequestReference",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "avro.java.string": "String"
+                }
+              }
+            },
+            {
+              "name": "envContentsListReference",
+              "type": [
+                "null",
+                {
+                  "type": "string",
+                  "avro.java.string": "String"
+                }
+              ],
+              "default": null
+            },
+            {
+              "name": "riskGraphInputsReference",
+              "type": [
+                "null",
+                {
+                  "type": "string",
+                  "avro.java.string": "String"
+                }
+              ],
+              "default": null
+            },
+            {
+              "name": "scenarioReference",
+              "type": [
+                "null",
+                {
+                  "type": "string",
+                  "avro.java.string": "String"
+                }
+              ],
+              "default": null
+            }
+          ]
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "calcGraphJobResultReferences",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "name": "CalcGraphJobResultReferences",
+          "fields": [
+            {
+              "name": "calcGraphBindingReference",
+              "type": {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            },
+            {
+              "name": "calculationReference",
+              "type": [
+                "null",
+                {
+                  "type": "string",
+                  "avro.java.string": "String"
+                }
+              ],
+              "default": null
+            }
+          ]
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "resultFaults",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "Fault",
+          "fields": [
+            {
+              "name": "message",
+              "type": {
+                "type": "string",
+                "avro.java.string": "String"
+              }
+            },
+            {
+              "name": "faultType",
+              "type": [
+                "null",
+                {
+                  "type": "string",
+                  "avro.java.string": "String"
+                }
+              ],
+              "default": null
+            },
+            {
+              "name": "stackTrace",
+              "type": [
+                "null",
+                {
+                  "type": "string",
+                  "avro.java.string": "String"
+                }
+              ],
+              "default": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

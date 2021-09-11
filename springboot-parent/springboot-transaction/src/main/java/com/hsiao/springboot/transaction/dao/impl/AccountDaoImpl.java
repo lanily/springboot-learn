@@ -20,7 +20,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
  * @create 2021/2/27
  * @since 1.0.0
  */
-public class AccountDaoImpl extends JdbcDaoSupport implements AccountDao {
+public class  AccountDaoImpl extends JdbcDaoSupport implements AccountDao {
 
     @Override
     public void outMoney(String out, Double money) {

@@ -1,0 +1,29 @@
+package com.hsiao.springboot.jersey;
+
+
+import com.hsiao.springboot.jersey.repository.EmployeeRepository;
+import com.hsiao.springboot.jersey.resource.EmployeeResource;
+import com.hsiao.springboot.jersey.service.EmployeeService;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.ComponentScan;
+
+/**
+ *
+ * 〈一句话功能简述〉<br>
+ *
+ * @projectName springboot-parent
+ * @title: TestConfiguration
+ * @description: TODO
+ * @author xiao
+ * @create 2021/8/7
+ * @since 1.0.0
+ */
+@TestConfiguration
+@ComponentScan(basePackageClasses = {
+        EmployeeResource.class,
+        EmployeeService.class,
+        EmployeeRepository.class})
+public class TestContextConfiguration {
+
+}
+

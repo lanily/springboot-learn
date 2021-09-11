@@ -1,0 +1,29 @@
+#logging.level.org.springframework=DEBUG
+#spring.jersey.type=filter
+##multipart.maxFileSize=-1
+logging:
+  level:
+    org:
+      springframework: ERROR
+server:
+  port: 8088
+#  context-path: /api
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+spring:
+  main:
+    banner-mode: "off"
+  ########################Datasource################
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springboot_learn?createDatabaseIfNotExist=true&characterEncoding=utf8&useUnicode=true&useSSL=false&rewriteBatchedStatements=true
+    username: root
+    password: root
+#    initialization-mode: always
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
