@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>springboot-websocket-netty</artifactId>
+    <groupId>com.hsiao.springboot</groupId>
+    <version>${env.project.version}</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>springboot-websocket-netty-demo</artifactId>
+  <version>${env.project.version}</version>
+  <name>springboot-websocket-netty-demo</name>
+  <description>Demo project for Spring Boot websocket netty demo</description>
+  <url>
+    https://gitee.com/xiao558/springboot-learn/tree/master/springboot-parent/springboot-websocket-netty/springboot-websocket-netty-demo
+  </url>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.hsiao.springboot</groupId>
+      <artifactId>netty-websocket-spring-boot-starter</artifactId>
+      <version>${env.project.version}</version>
+    </dependency>
+  </dependencies>
+</project>

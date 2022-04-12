@@ -1,0 +1,33 @@
+<!DOCTYPE>
+<html>
+<head>
+  <title>login</title>
+  <script src="/webjars/jquery/jquery.min.js"></script>
+  <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css">
+  <script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+  <style type="text/css">
+    .vertical-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body>
+<div class="container vertical-center">
+  <div class="col-md-6 col-md-offset-3">
+    <form action="/validate" method="post">
+      <h2>登录聊天室</h2>
+      <label for="username" class="sr-only">Username:</label>
+      <input type="text" name="username" id="username" class="form-control" placeholder="username"
+             required autofocus/>
+      <label for="password" class="sr-only">Password:</label>
+      <input type="password" name="password" id="password" class="form-control"
+             placeholder="Password" required/>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">login</button>
+    </form>
+  </div>
+</div> <!-- /container -->
+</body>
+</html>

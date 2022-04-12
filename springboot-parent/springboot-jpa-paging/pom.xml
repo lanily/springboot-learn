@@ -5,22 +5,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>springboot-parent</artifactId>
     <groupId>com.hsiao.springboot</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>springboot-parent</artifactId>
+    <version>${env.project.version}</version>
   </parent>
 
   <artifactId>springboot-jpa-paging</artifactId>
-
+  <version>${env.project.version}</version>
   <name>springboot-jpa-paging</name>
-  <!-- FIXME change it to the project's website -->
-  <url>http://www.example.com</url>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-  </properties>
+  <description>Demo project for Spring Boot jpa paging</description>
+  <url>https://gitee.com/xiao558/springboot-learn/tree/master/springboot-parent/springboot-jpa-paging</url>
 
   <dependencies>
     <dependency>

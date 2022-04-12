@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>WebSocket客户端</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+
+</head>
+<body>
+<div class="page-header">
+    <h1 style="margin-top:-20px;margin-left:20px;font-size:30px;">WebSocket客户端</h1>
+    <div style="margin-left:25px;margin-top:30px;color:gray;font-size:14px;">
+        Websocket是一种用于H5浏览器的实时通讯协议，可以做到数据的实时推送，可适用于广泛的工作环境，例如客服系统、物联网数据传输系统，该测试工具可用于websocket开发初期的测试工作
+    </div>
+</div>
+<div>
+    <div class="zone_conn">
+        <input type="text" class="form-control" style="float:left;" id="inp_url" placeholder="连接的地址">
+        <button type="button" id="btn_conn" class="btn btn-primary"
+                style="float:left;margin-left:10px;margin-right:10px;" onclick="openSocket();">连接
+        </button>
+        <button type="button" id="btn_close" class="btn btn-danger" style="float:left;" onclick="closeSocket();"
+                disabled="disabled">断开
+        </button>
+    </div>
+    <div class="clear_both" style="width:430px;">
+        1、连接格式为 ws://IP或域名:端口/路径<br>
+        2、请先连接再发送消息
+    </div>
+    <div class="zone_send">
+        <input type="text" class="form-control" style="width: 200px;" id="inp_from_user" value="userA"
+               placeholder="from用户">
+        &nbsp;&nbsp;to
+        <input type="text" class="form-control" style="width: 200px; " id="inp_to_user" value="userB"
+               placeholder="to用户">
+        <br>
+        <textarea id="inp_send" class="form-control" style="height:100px;" placeholder="发送的内容"></textarea>
+        <br>
+        <button type="button" id="btn_send" class="btn btn-info" onclick="sendMessage();" disabled="disabled">
+            发送（ctrl+回车）
+        </button>
+    </div>
+</div>
+<div style="position:absolute;top:120px;left:470px;">
+    <div id="div_msgzone" class="panel panel-default">
+        <div class="panel-heading">消息窗口</div>
+        <div id="div_msg" class="panel-body" style="width: 1420px; height: 804px;">
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+<script src="./js/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    $(function () {
+        let defaultUrl = "ws://" + window.location.host + window.location.pathname + "chat";
+        $("#inp_url").val(defaultUrl);
+    });
+
+    let socket;
+
+    function openSocket() {
+        if (typeof (WebSocket) == "undefined") {
+            alert("您的浏览器不支持WebSocket")
+            return
+        }
+        //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
+        const socketUrl = $("#inp_url").val();
+        if (socket != null) {
+            socket.close();
+            socket = null;
+        }
+        socket = new WebSocket(socketUrl);
+        //打开事件
+        socket.onopen = function () {
+            appendMeMsg("连接成功！")
+            document.getElementById("btn_conn").disabled = true;
+            document.getElementById("btn_close").disabled = false;
+            document.getElementById("btn_send").disabled = false;
+            // 发送用户上线消息
+            let fromUser = $("#inp_from_user").val().trim();
+            const json = {"fromUser": fromUser};
+            socket.send(JSON.stringify(json));
+            document.getElementById("inp_from_user").disabled = true;
+
+        };
+        //获得消息事件
+        socket.onmessage = function (msg) {
+            const json = JSON.parse(msg.data)
+            appendServerMsg(json.fromUser, json.message);
+        };
+        //关闭事件
+        socket.onclose = function () {
+            appendMeMsg("连接断开！")
+            document.getElementById("btn_conn").disabled = false;
+            document.getElementById("btn_close").disabled = true;
+            document.getElementById("btn_send").disabled = true;
+            document.getElementById("inp_from_user").disabled = false;
+        };
+        //发生了错误事件
+        socket.onerror = function () {
+            appendMeMsg("连接错误！")
+        }
+    }
+
+    function closeSocket() {
+        if (socket != null) {
+            socket.close();
+            socket = null;
+        }
+    }
+
+    function sendMessage() {
+        let fromUser = $("#inp_from_user").val().trim();
+        let toUser = $("#inp_to_user").val().trim();
+        let message = $("#inp_send").val().trim();
+        if(fromUser === "" || toUser === "" || message === "") {
+            alert("from用户、to用户、内容都不能为空！");
+            return;
+        }
+        const json = {"fromUser": fromUser, "toUser": toUser, "message": message};
+        socket.send(JSON.stringify(json));
+        appendMeMsg(message)
+        $("#inp_send").val("");
+    }
+
+    function appendMeMsg(msg) {
+        $("#div_msg").append('<div style="margin-bottom:10px;position:relative;left:0px;"><div style="color:green">我 ' + getTime() + '</div>' + msg + '</div>')
+    }
+
+    function appendServerMsg(user, msg) {
+        $("#div_msg").append('<div style="margin-bottom:10px;position:relative;left:0px;"><div style="color:blue">' + user + ' ' + getTime() + '</div>' + msg + '</div>')
+    }
+
+    function getTime() {
+        const date = new Date();
+        const Y = date.getFullYear() + '-';
+        const M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+        const D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' ';
+        const h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
+        const m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
+        const s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+        return Y + M + D + h + m + s;
+    }
+</script>

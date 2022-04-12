@@ -4,13 +4,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>springboot-parent</artifactId>
     <groupId>com.hsiao.springboot</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>springboot-parent</artifactId>
+    <version>${env.project.version}</version>
   </parent>
 
   <artifactId>springboot-security</artifactId>
+  <version>${env.project.version}</version>
+  <name>springboot-security</name>
   <description>Spring Boot With Spring Security Demo</description>
+  <url>https://gitee.com/xiao558/springboot-learn/tree/master/springboot-parent/springboot-security</url>
 
   <dependencies>
     <!-- dependency extend from parent -->

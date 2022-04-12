@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.hsiao.springboot.websocket.netty.autoconfigure.NettyWebSocketAutoConfigure

@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.hsiao.springboot.websocket.config.MessageBeanConfig

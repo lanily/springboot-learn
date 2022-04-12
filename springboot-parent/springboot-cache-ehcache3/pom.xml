@@ -4,19 +4,16 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>springboot-parent</artifactId>
     <groupId>com.hsiao.springboot</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>springboot-parent</artifactId>
+    <version>${env.project.version}</version>
   </parent>
-  <groupId>com.hsiao.springboot</groupId>
-  <artifactId>springboot-cache-ehcache3</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>springboot-jpa-ehcache3</name>
-  <description>Demo project for Spring Boot ehcache 3</description>
 
-  <properties>
-    <java.version>1.8</java.version>
-  </properties>
+  <artifactId>springboot-cache-ehcache3</artifactId>
+  <version>${env.project.version}</version>
+  <name>springboot-jpa-ehcache3</name>
+  <description>Demo project for Spring Boot ehcache3</description>
+  <url>https://gitee.com/xiao558/springboot-learn/tree/master/springboot-parent/springboot-cache-ehcache3</url>
 
   <dependencies>
     <dependency>

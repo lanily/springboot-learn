@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.hsiao.springboot</groupId>
+    <artifactId>springboot-websocket</artifactId>
+    <version>${env.project.version}</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>springboot-websocket-netty</artifactId>
+  <version>${env.project.version}</version>
+  <name>springboot-websocket-netty</name>
+  <description>Demo project for Spring Boot websocket netty</description>
+  <url>
+    https://gitee.com/xiao558/springboot-learn/tree/master/springboot-parent/springboot-websocket-netty
+  </url>
+  <packaging>pom</packaging>
+
+  <properties>
+    <netty.version>4.1.67.Final</netty.version>
+  </properties>
+
+  <modules>
+    <module>netty-websocket-spring-boot-starter</module>
+    <module>springboot-websocket-netty-demo</module>
+  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-autoconfigure</artifactId>
+      <version>${spring.boot.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-all</artifactId>
+      <version>${netty.version}</version>
+    </dependency>
+
+    <!--    <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-codec-http</artifactId>
+          <version>${netty.version}</version>
+        </dependency>
+
+        <dependency>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-handler</artifactId>
+          <version>${netty.version}</version>
+        </dependency>-->
+  </dependencies>
+</project>

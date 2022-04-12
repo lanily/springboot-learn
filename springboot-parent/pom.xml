@@ -6,7 +6,9 @@
 
   <groupId>com.hsiao.springboot</groupId>
   <artifactId>springboot-parent</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <!-- mvn versions:set -DnewVersion=0.1.1 -->
+  <!-- update  version method see https://www.jb51.net/article/202893.htm -->
+  <version>${env.project.version}</version>
   <packaging>pom</packaging>
 
   <!--子模块-->
@@ -41,9 +43,7 @@
     <module>springboot-swagger</module>
     <module>springboot-apiversion</module>
     <module>springboot-apisign</module>
-    <module>springboot-websocket-stomp</module>
-    <module>springboot-websocket-h5</module>
-    <module>springboot-websocket-springapi</module>
+    <module>springboot-websocket</module>
     <!--
     <module>springboot-restful</module>
     <module>springboot-log</module>
@@ -108,10 +108,10 @@
     <!--    <zkclient.version>0.1</zkclient.version>-->
     <!--    <poi.version>3.15</poi.version>-->
     <!--    <swagger2.version>2.6.1</swagger2.version>-->
+    <env.project.version>0.1.0</env.project.version>
   </properties>
 
   <dependencies>
-
     <!-- Web 依赖 -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -166,6 +166,7 @@
     <!--      <artifactId>UserAgentUtils</artifactId>-->
     <!--      <version>${user.agent.version}</version>-->
     <!--    </dependency>-->
+
   </dependencies>
 
   <repositories>
@@ -201,6 +202,16 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
+<!-- 如果不想产生pom.xml.versionsBackup文件，则可以在父pom配置如下插件
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.8.1</version>
+        <configuration>
+          <generateBackupPoms>false</generateBackupPoms>
+        </configuration>
+      </plugin>
+      -->
     </plugins>
   </build>
 </project>

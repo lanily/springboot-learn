@@ -1,0 +1,12 @@
+#ws相关属性配置
+ws:
+  host: 0.0.0.0
+  port: 8081
+#  arg: /ws/admin
+# 解决返回页面中文乱码问题
+server:
+  port: 8080
+  servlet:
+    encoding:
+      force: true
+      charset: UTF-8

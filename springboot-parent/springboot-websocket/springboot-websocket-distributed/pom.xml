@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.hsiao.springboot</groupId>
+    <artifactId>springboot-websocket</artifactId>
+    <version>${env.project.version}</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>springboot-websocket-distributed</artifactId>
+  <version>${env.project.version}</version>
+  <name>springboot-websocket-distributed</name>
+  <description>Demo project for Spring Boot websocket distributed</description>
+  <url>
+    https://gitee.com/xiao558/springboot-learn/tree/master/springboot-parent/springboot-websocket-distributed
+  </url>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-redis</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+    </dependency>
+  </dependencies>
+</project>
