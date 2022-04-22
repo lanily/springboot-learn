@@ -1,0 +1,58 @@
+package com.hsiao.springboot.websocket.stomp.config;
+
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.util.WebUtils;
+
+/**
+ *
+ * 〈一句话功能简述〉<br>
+ *
+ * @projectName springboot-parent
+ * @title: SecurityConfig
+ * @description: TODO
+ * @author xiao
+ * @create 2022/4/21
+ * @since 1.0.0
+ */
+@Configuration
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.cors()
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/user/info", "/api/foos/**")
+                .hasAuthority("SCOPE_read")
+                .antMatchers(HttpMethod.POST, "/api/foos")
+                .hasAuthority("SCOPE_write")
+                .anyRequest()
+                .authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .jwt()
+                .and()
+//                .bearerTokenResolver(this::tokenExtractor)
+        ;
+    }
+
+    public String tokenExtractor(HttpServletRequest request) {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (header != null) {
+            return header.replace("Bearer ", "");
+        }
+        Cookie cookie = WebUtils.getCookie(request, "access_token");
+        if (cookie != null) {
+            return cookie.getValue();
+
+        }
+        return null;
+    }
+}

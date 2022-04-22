@@ -1,0 +1,38 @@
+spring:
+  profiles:
+    #    active: release
+    active: dev
+
+#error
+server:
+  error:
+    include-stacktrace: always
+  port: 8090
+
+#log
+logging:
+  level:
+    org.springframework.web: trace
+
+#swagger
+# default swagger ui url
+# http://localhost:8090/swagger-ui/index.html
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true
+#      base-url: /doc
+
+# ===== 自定义swagger配置 ===== #
+swagger:
+  access:
+    iplist: 192.168.3.1,127.0.0.1
+  enable: true
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: springfox swagger 3.0整合Demo
+  try-host: http://localhost:${server.port}
+
+## https://www.cxyzjd.com/article/sunxiaoju/110751151
+## https://github.com/liuhongdi/swagger3security
+## https://github.com/alprogor/swagger-demo

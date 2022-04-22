@@ -1,0 +1,44 @@
+package com.hsiao.springboot.websocket.api.config;
+
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+
+/**
+ *
+ * 〈一句话功能简述〉<br>
+ *
+ * @projectName springboot-parent
+ * @title: WebMvcConfig
+ * @description: TODO
+ * @author xiao
+ * @create 2022/4/22
+ * @since 1.0.0
+ */
+//@EnableWebMvc 接管springmvc
+@Configuration
+public class WebMvcConfig implements WebMvcConfigurer {
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        //浏览器发送gong请求会跳转到/templates/success.html页面
+        //测试用的
+        registry.addViewController("gong").setViewName("success");
+    }
+    //所有的WebMvcConfigurer会一起起作用
+    //将组件注册到容器中
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer() {
+        WebMvcConfigurer webMvcConfigurer = new WebMvcConfigurer(){
+            @Override
+            public void addViewControllers(ViewControllerRegistry registry) {
+                registry.addViewController("/").setViewName("login");
+                registry.addViewController("/login.html").setViewName("login");
+            }
+        };
+        return webMvcConfigurer;
+    }
+
+}

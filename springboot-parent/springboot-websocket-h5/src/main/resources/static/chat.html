@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>SpringBoot-ws</title>
+  <script src="../js/reconnectingwebsocket.js" type="text/javascript" charset="utf-8"></script>
+  <!--    <script src="../js/sockjs.min.js" type="text/javascript" charset="utf-8"></script>-->
+  <script src="../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+</head>
+<body>
+<div id="info">
+  <div>发送人：<input type="text" id="suer" required="required" placeholder="请输入发送人"></div>
+  <div>接收人：<input type="text" id="ruser" required="required" placeholder="请输入接收人"></div>
+</div>
+
+<div id="index">
+</div>
+
+<div class="msg">
+  <textarea id="send_content" placeholder="在此输入消息..."></textarea>
+</div>
+<div class="ibtn c">
+  <button onclick=openWebsocket()>开启连接</button>
+  <button onclick=closeWebsocket()>关闭连接</button>
+  <button onclick=sendMessage()>发送消息</button>
+</div>
+
+<script type="text/javascript">
+  document.getElementById('send_content').focus();
+
+  var websocket = null;
+
+  //关闭websocket
+  function closeWebsocket() {
+    //3代表已经关闭
+    if (3 != websocket.readyState) {
+      websocket.close();
+    } else {
+      alert("websocket之前已经关闭");
+    }
+  }
+
+  // 开启websocket
+  function openWebsocket() {
+    username = $("#suer").val()
+    if (username != "") {
+
+      //当前浏览前是否支持websocket
+      if ("WebSocket" in window) {
+        websocket = new ReconnectingWebSocket("ws://localhost:8080/send/" + username);
+        websocket.reconnectInterval = 3000 //每3s进行一次重连，默认是每秒
+      } else if ('MozWebSocket' in window) {
+        websocket = new MozWebSocket("ws://localhost:8080/send/" + username);
+      } else {
+        //低版本
+        websocket = new SockJS("http://localhost:8080/sockjs/send/" + username);
+      }
+    }
+    websocket.onopen = function (event) {
+      setMessage("打开连接");
+    }
+
+    websocket.onclose = function (event) {
+      setMessage("关闭连接");
+    }
+
+    websocket.onmessage = function (event) {
+      // setMessage(event.data);
+      setMessageTxt(event.data)
+
+    }
+
+    websocket.onerror = function (event) {
+      setMessage("连接异常，正在重连中...");
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function () {
+      closeWebsocket();
+    }
+  }
+
+  //将消息显示在网页上
+  function setMessage(message) {
+    alert(message)
+  }
+
+  function setMessageTxt(message) {
+    mObj = JSON.parse(message)
+    var div = document.createElement('div')
+    div.innerHTML = "<div class='name l'><h2>" + mObj['from_topic'] + "</h2></div>" +
+        "<div class='content w l'>" + mObj['content'] + "</div>"
+    div.setAttribute("class", "from_info")
+    document.getElementById('index').appendChild(div)
+  }
+
+  // 发送消息
+  function sendMessage() {
+    //1代表正在连接
+    if (1 == websocket.readyState) {
+      var message = document.getElementById('send_content').value;
+      var div = document.createElement('div')
+      div.innerHTML = "<div class='name r rcontent'><h2> Me </h2></div>" +
+          "<div class='content w r'>" + message + "</div>"
+      div.setAttribute("class", "send_info")
+      document.getElementById('index').appendChild(div)
+      ruser = document.getElementById("ruser").value;
+      message = "{'content':'" + message + "','to_topic':'" + ruser + "'}"
+      websocket.send(message);
+    } else {
+      alert("websocket未连接");
+    }
+    document.getElementById('send_content').value = "";
+    document.getElementById('send_content').focus();
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>springboot-parent</artifactId>
+    <groupId>com.hsiao.springboot</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>springboot-validation</artifactId>
+  <description>表单校验案例</description>
+
+  <dependencies>
+    <!-- dependency extend from parent -->
+    <!-- Web 依赖 - 包含了 hibernate-validator 依赖-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.boot</groupId>-->
+    <!--      <artifactId>spring-boot-starter-web</artifactId>-->
+    <!--    </dependency>-->
+
+    <!-- 单元测试依赖 -->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.boot</groupId>-->
+    <!--      <artifactId>spring-boot-starter-test</artifactId>-->
+    <!--      <scope>test</scope>-->
+    <!--    </dependency>-->
+
+    <!-- hibernate-validator框架-->
+    <!-- 安装依赖：根据 jsr380 规范，validation-api 依赖库包含标准 validation api
+    validation-api只是API定义，还需要实现类。hibernate validator是一套实现了validation-api定义的实现类。
+    在实际使用中，我们必须同时引入validation-api定义包和实现类hibernate-validator、hibernate-validator-annotation-processor。
+    -->
+    <!--jsr 303-->
+    <!--<dependency>
+      <groupId>javax.validation</groupId>
+      <artifactId>validation-api</artifactId>
+      <version>2.0.1.Final</version>
+    </dependency>
+    -->
+    <!-- hibernate validator-->
+    <!-- 验证API参考实现 Hibernate Validator 是验证规范的参考实现，我们需要增加下面依赖 -->
+    <!--
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>6.1.7.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate.validator</groupId>
+      <artifactId>hibernate-validator-annotation-processor</artifactId>
+      <version>6.1.7.Final</version>
+    </dependency>
+    -->
+    <!--  表达式依赖
+    jsr 380 提供了变量插入功能，允许表达式在错误信息中混合使用。为了解析表达式，
+    我们必须增加下面依赖：表达式语言 API 及其实现，GlassFish 提供了参考实现
+     -->
+
+    <!--
+   <dependency>
+     <groupId>org.glassfish</groupId>
+     <artifactId>javax.el</artifactId>
+     <version>3.0.0</version>
+   </dependency>
+   -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <!-- Spring Data JPA 依赖 :: 数据持久层框架 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+    </dependency>
+
+    <!-- h2 数据源连接驱动 -->
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+    </dependency>
+
+    <!-- 模板引擎 Thymeleaf 依赖 -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-thymeleaf</artifactId>
+    </dependency>
+
+    <!-- Lombok 工具 -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <optional>true</optional>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.8.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2.1</version>
+    </dependency>
+
+  </dependencies>
+
+</project>

@@ -14,7 +14,7 @@
     <module>springboot-helloword</module>
     <module>springboot-configuration</module>
     <module>springboot-properties</module>
-    <module>springboot-validate-form-input</module>
+    <module>springboot-validation</module>
     <module>springboot-session-redis</module>
     <module>springboot-session-jdbc</module>
     <module>springboot-security</module>
@@ -29,6 +29,21 @@
     <module>springboot-jar-separation-configuration</module>
     <module>springboot-kafka</module>
     <module>springboot-transaction</module>
+    <module>springboot-async</module>
+    <module>springboot-retry</module>
+    <module>springboot-ddd</module>
+    <module>springboot-jpa-paging</module>
+    <module>springboot-test</module>
+    <module>springboot-test-mockito</module>
+    <module>springboot-jpa-multi-query</module>
+    <module>springboot-static-inject</module>
+    <module>springboot-jersey</module>
+    <module>springboot-swagger</module>
+    <module>springboot-apiversion</module>
+    <module>springboot-apisign</module>
+    <module>springboot-websocket-stomp</module>
+    <module>springboot-websocket-h5</module>
+    <module>springboot-websocket-springapi</module>
     <!--
     <module>springboot-restful</module>
     <module>springboot-log</module>
